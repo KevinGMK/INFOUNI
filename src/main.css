@@ -1,0 +1,238 @@
+:root{
+  --max-width:1100px;
+  --accent:#1976d2;
+  --muted:#3a4666;
+  --header-height:76px;
+  --anim-duration:260ms;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  background:#f4f4f4;
+  color:#222;
+  line-height:1.45;
+}
+
+/* =========================
+   HEADER animado
+   ========================= */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--muted);
+  color: #fff;
+  transition: background var(--anim-duration) ease, box-shadow var(--anim-duration) ease;
+  will-change: transform;
+}
+
+/* wrapper principal */
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column; /* inicialmente logo arriba, nav abajo */
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  gap: 10px;
+  transition: all var(--anim-duration) ease;
+}
+
+/* logo */
+.logo {
+  font-size: 2.2rem;
+  margin: 0;
+  transition: font-size var(--anim-duration) ease, transform var(--anim-duration) ease;
+}
+
+/* nav */
+.header-inner nav {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.header-inner nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  transition: color 180ms ease, background 180ms ease;
+}
+.header-inner nav a:hover {
+  background: rgba(255,255,255,0.05);
+  color: #cfe7ff;
+}
+
+/* estado cuando se hace scroll */
+.scrolled .header-inner {
+  flex-direction: row;       /* logo a la izquierda, nav a la derecha */
+  justify-content: space-between;
+  padding: 8px 20px;
+}
+.scrolled .logo {
+  font-size: 1.8rem;
+}
+
+/* =========================
+   MAIN
+   ========================= */
+.site-main {
+  flex: 1 1 auto;
+  display: block;
+  width: 100%;
+  padding: 20px 16px; /* reducido para que no quede tanto espacio */
+  box-sizing: border-box;
+}
+.site-main > .container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+/* título de secciones */
+.section-title { 
+  color: #435694; 
+  margin-bottom: 16px; 
+  font-size: 1.5rem; 
+}
+.section p { margin-bottom: 12px; }
+
+/* imagen inicio */
+#inicio2 {
+  border: 2px solid rgb(49, 49, 192);
+  border-radius: 10%;
+  box-shadow: #435694 20px 10px 15px 0px;
+  height: 20rem;
+  margin: 20px auto;
+  display: block;
+}
+
+/* botones */
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}
+.btn:hover { background: #1565c0; }
+
+/* =========================
+   FOOTER
+   ========================= */
+.site-footer {
+  background: #2f3a57;
+  color: #e6eefc;
+  padding: 24px 16px;
+}
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+.footer-col h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #dfeeff;
+}
+.footer-col p, .footer-col li {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #d0def8;
+}
+.footer-col ul { list-style: none; padding: 0; margin: 0; }
+.footer-col a { color: #cfe7ff; text-decoration: none; }
+.footer-col a:hover { text-decoration: underline; }
+
+.site-footer .copyright {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #bfd6ff;
+}
+
+/* responsive */
+@media (max-width: 520px) {
+  .header-inner { flex-direction: column; gap: 8px; }
+  .site-main { padding: 16px 10px; }
+  .footer-inner { gap: 12px; }
+}
+
+.inventario {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.inventario h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.tarjeta {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  background: #f9f9f9;
+}
+
+.tarjeta:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.tarjeta-header {
+  background: #2c3e50;
+  color: white;
+  padding: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tarjeta-content {
+  max-height: 0;
+  overflow: hidden;
+  background: #fff;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  padding: 0 1rem; /* padding invisible al inicio */
+}
+
+.tarjeta:hover .tarjeta-content {
+  max-height: 278px; /* puedes ajustarlo según contenido */
+  padding: 1rem;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #eee;
+  
+}
+
+.fila span {
+  padding: 0.3rem;
+}
+
+.fila.descarga {
+  grid-template-columns: 1fr; /* que ocupe toda la fila */
+  text-align: center;
+  font-weight: bold;
+  color: #0077cc;
+}

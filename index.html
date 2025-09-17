@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SOPORTE - INFOUNI</title>
+  <link rel="stylesheet" href="src/main.css" />
+  <link rel="stylesheet" href="src/tabla.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <h1>INFOUNI</h1>
+      <nav>
+        <a href="#" data-section="inicio">Inicio</a>
+        <a href="#" data-section="inventario">Inventario</a>
+        <a href="#" data-section="contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Contenedor dinámico -->
+  <main id="content" class="site-main"></main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Contacto Rápido</h4>
+        <p>Soporte INFOUNI - Área de Cómputo</p>
+        <p>Tel: +51 969 568 446</p>
+        <p>Email: soporte@infouni.edu.pe</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Enlaces</h4>
+        <ul>
+          <li><a href="#" data-section="inicio">Inicio</a></li>
+          <li><a href="#" data-section="inventario">Inventario</a></li>
+          <li><a href="#" data-section="contacto">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Horario</h4>
+        <p>Lunes a Sábado: 7:30 - 20:30</p>
+        <p>Domingo: 07:30 - 18:00</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Nota</h4>
+        <p>Todo lo necesario y fundamental en <strong>Inventario</strong></p>
+        <p class="copyright">© <span id="year"></span> INFOUNI - Área de Soporte</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SheetJS: lectura y escritura de Excel en el navegador -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <!-- core app (carga secciones SPA) -->
+  <script src="src/app.js"></script>
+
+  <!-- documentoTabla: gestiona clicks en data-tabla y muestra/descarga tablas -->
+  <script src="src/documentoTabla.js"></script>
+
+  <script>
+    // año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
