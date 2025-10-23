@@ -1,0 +1,105 @@
+/* src/barraBusqueda.css */
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;   /* 🔥 separación elegante debajo del buscador */
+}
+
+#buscador {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+#buscador:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 6px rgba(25, 118, 210, 0.4);
+}
+
+/* resultados flotantes */
+.resultados-flotantes {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;               
+  max-height: 300px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 6px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none;
+  animation: fadeDown 0.2s ease-out;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.resultado-item {
+  display: flex;
+  justify-content: space-between;    
+  align-items: center;               
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+
+.resultado-item:last-child {
+  border-bottom: none;
+}
+
+.resultado-item:hover {
+  background: #f0f6ff; /* 🔥 más elegante que gris */
+}
+
+.resultado-texto {
+  display: flex;
+  flex-direction: column;            
+  gap: 2px;
+}
+
+.resultado-titulo {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #222;
+}
+
+.resultado-detalle {
+  font-size: 0.85rem;
+  color: #555;
+  white-space: nowrap;
+}
+
+.resultado-detalle span {
+  margin-right: 4px;
+}
+
+.abrir-btn {
+  margin-left: 14px;                
+  padding: 6px 14px;                
+  font-size: 0.9rem;                
+  border: none;
+  border-radius: 6px;
+  background: #1976d2;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  flex-shrink: 0;                   
+}
+
+.abrir-btn:hover {
+  background: #145a9e;
+  transform: scale(1.05); /* 🔥 mini animación */
+}

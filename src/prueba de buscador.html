@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Software</title>
+    <style>
+        /* ======================================================================
+           TÍTULO: Estilos Esenciales para el Buscador
+           FUNCIÓN: Contiene únicamente los estilos necesarios para que el 
+                    componente del buscador se vea y funcione correctamente,
+                    incluyendo las animaciones de los bordes.
+           ====================================================================== */
+        :root {
+            --color-primary: #003366;
+            --color-secondary: #0055a5;
+            --color-accent: #007bff;
+            --metal-2: #0a3d91;
+            --metal-3: #66ccff;
+            --color-cyan: #00FFFF;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background-color: #f4f7f9;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            min-height: 100vh;
+        }
+
+        .contenedor-principal {
+            width: 100%;
+            max-width: 600px; /* Ancho ajustado para el buscador */
+            padding: 20px;
+            border: 3px solid #000;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .titulo-seccion {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+
+        .buscador {
+            margin-bottom: 20px;
+        }
+        
+        /* Estilos para el campo de búsqueda con borde animado. */
+        .buscador input {
+            --border-size: 4px;
+            --color-blue-current: var(--color-primary);
+            --color-footer-blue: var(--metal-2);
+            --color-celeste: var(--metal-3);
+            --color-cyan: #00FFFF;
+
+            width: 100%;
+            padding: 12px;
+            position: relative;
+            background: #fff;
+            border: var(--border-size) solid black;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+            outline: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .buscador input:focus {
+            outline: none;
+            border: var(--border-size) solid black;
+        }
+
+        .buscador input::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(45deg,
+                    var(--color-blue-current),
+                    var(--color-footer-blue),
+                    var(--color-celeste),
+                    var(--color-cyan),
+                    var(--color-blue-current));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: border-animation 15s ease infinite;
+        }
+        
+        /* Animación para los bordes */
+        @keyframes border-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .botones-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* Estilos para los botones de resultados con un efecto visual potente. */
+        .boton-enlace {
+            --border-size: 4px;
+            --color-blue-current: var(--color-primary);
+            --color-footer-blue: var(--metal-2);
+            --color-celeste: var(--metal-3);
+            --color-cyan: #00FFFF;
+
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            position: relative;
+            background: var(--color-accent);
+            background-clip: padding-box;
+            border: var(--border-size) solid black;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 1;
+            overflow: hidden;
+            color: #fff;
+            transition: background-color .2s;
+            box-sizing: border-box;
+            /* Borde de texto para máxima legibilidad. */
+            text-shadow:
+                -2px -2px 0 #000, 2px -2px 0 #000,
+                -2px 2px 0 #000, 2px 2px 0 #000,
+                -2px 0 0 #000, 2px 0 0 #000,
+                0 -2px 0 #000, 0 2px 0 #000;
+        }
+
+        .boton-enlace::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(45deg,
+                    var(--color-blue-current),
+                    var(--color-footer-blue),
+                    var(--color-celeste),
+                    var(--color-cyan),
+                    var(--color-blue-current));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: border-animation 15s ease infinite;
+        }
+
+        .boton-enlace:hover {
+            background: var(--color-secondary);
+        }
+
+        .boton-enlace:active {
+            background: #004085;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor-principal">
+        <h1 class="titulo-seccion">Busque su Software</h1>
+        <div class="buscador">
+            <input type="search" id="buscador-input" placeholder="Buscar software..." aria-label="Buscar software">
+        </div>
+        <div id="botones-container" class="botones-container" aria-live="polite"></div>
+    </div>
+
+    <script>
+        /* ======================================================================
+           TÍTULO: Lógica del Buscador de Software
+           FUNCIÓN: Contiene la base de datos de enlaces y el código que filtra
+                    y muestra los resultados en tiempo real.
+           ====================================================================== */
+        const enlaces = [
+            // Manuales de Instalación
+            { nombre: "SolidWorks Manual en Video", url: "https://drive.google.com/uc?export=download&id=1VCnmi93qmPVwbcD5BwAdhizyhvUjEu7p" },
+            { nombre: "SolidWorks Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1F6hE73Dg6Wq7YuwJGEVRxxegRsJ2660D" },
+            { nombre: "MathCad Prime Manual en Video", url: "https://drive.google.com/uc?export=download&id=1HkuczoNPdp3VJdxtPa9lLCJ-arVgiQkc" },
+            { nombre: "MathCad Prime Manual en Text", url: "https://drive.google.com/uc?export=download&id=11eMNEVJz72m-frr5EO6XyFUDqbpL-yyW" },
+            { nombre: "Visual Code Instalador", url: "https://drive.google.com/uc?export=download&id=1DJdBGBsZC2W41L4SuJjCM_Y0D8ZCnr4g" },
+            { nombre: "Manual de Instalacion Pip Numpy PDF", url: "https://drive.google.com/uc?export=download&id=1MQGlmwq1jT0Azz7ug6Q7d6MuVNooDTgN" },
+            { nombre: "Carpeta Compartida", url: "https://drive.google.com/uc?export=download&id=1xzPdFUiAZEQyFsFv-czAsUIYUzcxRen2" },
+            { nombre: "CorelDRAW Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1pmodGplAqXmvueGuW79bPkMMIPAgNBYM" },
+            { nombre: "CorelDRAW Manual en Video", url: "https://drive.google.com/uc?export=download&id=1ylrG-m_5wEjmA4Gqhk2ahyyuQu34trTB" },
+            { nombre: "MATLAB Manual en Video", url: "https://drive.google.com/uc?export=download&id=1HaCvkG2ctQe1N971q_55hZoNnUBFvLdz" },
+            { nombre: "MATLAB Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1UHbMiRzzKZq0uH3xuZwb4F6ItdV-dUzH" },
+            { nombre: "Fondos UNI", url: "https://drive.google.com/uc?export=download&id=1Puy4cYyqK7Q12GTYWx6ccJQHW_AkpucC" },
+            { nombre: "Trucos de Instalacion Windows 10 y 11", url: "https://drive.google.com/uc?export=download&id=16k6ORcL-MhdQumURhiFCtRB8AvRdRUTw" },
+            { nombre: "Comandos de CMD", url: "https://drive.google.com/uc?export=download&id=1ZU4a4iGjEwR3N8cIzwWZFpfqJ31KE3Nz" },
+            { nombre: "Borrar Temporales", url: "https://drive.google.com/uc?export=download&id=1St45CTMfxHdlPVwybLMrvXEn9NBZKsth" },
+            { nombre: "USB Booteable", url: "https://drive.google.com/uc?export=download&id=1dU0lqges960FSe12X-lWq_HaU7HCxBj2" },
+            { nombre: "VMware Manual de Instalacion PDF", url: "https://drive.google.com/uc?export=download&id=1rp5QdB6Yakb-zV0gAGxiK7QLI0kdU1_h" },
+            { nombre: "IBM Manual en Video", url: "https://drive.google.com/uc?export=download&id=1xoM9M9KyfefmiPTht5RWhKEVqxOcxdR4" },
+            { nombre: "IBM Manual en Text", url: "https://drive.google.com/uc?export=download&id=1ims1VxlkI52rSmwaagVN-Cbzf3QbnH7V" },
+            { nombre: "Autodesk Inventor Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1vdloTzdboUYHYYFMUI4zKLlg4Esj5vUG" },
+            { nombre: "Autodesk Autocad Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1DE1VXscREo-RjZVY5N8GzwCpaPHRd4g6" },
+            { nombre: "Recuva Instalacion y Uso en Video", url: "https://drive.google.com/uc?export=download&id=1XM4lvMQ6Nj8qbRLgOtxeSgEWK4U_Oh9j" },
+            { nombre: "Mastercam 2025 Manual en Video", url: "https://drive.google.com/uc?export=download&id=1gUP2zBJ4jCPpfN4ONAYQ02Lg-YOaXNHv" },
+            { nombre: "Atlas TI 24 Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1Nyiu33K1uQP_EmQsKA8Cyy-TG6tDMbMy" },
+            { nombre: "Manual de Instalacion Sap 2000 26", url: "https://drive.google.com/uc?export=download&id=1OJjrC_UyyFvV-rsflTHiWWJ9jPs9MQbm" },
+            { nombre: "Symbol Factory 3 Manual en PDF", url: "https://drive.google.com/uc?export=download&id=11JrwYxwgGGm2mJwKZiQnrnoShDzpab_E" },
+            { nombre: "RStudio y R.4.4.3 Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1Vsm0lN-4-xFqSEXv2WN4XnhyXUXvDiIe" },
+            { nombre: "NVivo 12 Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1Vsm0lN-4-xFqSEXv2WN4XnhyXUXvDiIe" },
+            { nombre: "MaxSurf Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1gxS2Wd0BO6fcis8WwaYPFl3BxkAZGnYo" },
+            { nombre: "Rhinoceros Manual en PDF", url: "https://drive.google.com/uc?export=download&id=1GmrWKiX-uk1HaazcHlndVYZzUp-K3SDk" },
+            { nombre: "Adobe Acrobat Manual en PDF", url: "https://drive.google.com/uc?export=download&id=13dsvNWgZZxlNVrIXHd6uHB8fnUgaaFTC" },
+
+            // Solución de Errores Comunes
+            { nombre: "SolidWorks Error -8,544,0", url: "https://drive.google.com/uc?export=download&id=1hWn6JUl_C0iag-DZ94R7SiLiCDCrzFq5" },
+            { nombre: "SolidWorks Electrical No conecta con SQL Server", url: "https://drive.google.com/uc?export=download&id=1xx1LIo0FqeRYpHmerJNCYeZxGKfDVHU9" },
+            { nombre: "SolidWorks Pacht no se Elimina", url: "https://drive.google.com/uc?export=download&id=1_1Elp3lr4VPqYvEChlFIdLrz7RZ6v1xv" },
+            { nombre: "SolidWorks Toolbox no Funciona", url: "https://drive.google.com/uc?export=download&id=1GCdk0kPrau7gVruCSJW1W1RVnDAoPSiL" },
+            { nombre: "SolidWorks Faltan Componentes", url: "https://drive.google.com/uc?export=download&id=1QEdmrkwNLvHJ_mgkP9XKfr-VDcKMkzoX" },
+            { nombre: "Autodesk Error Reinicio Constante", url: "https://drive.google.com/uc?export=download&id=1LjZpEmMCDz8h-tifQEyUhe9jAKBs18jB" },
+            { nombre: "Autodesk Error 103", url: "https://drive.google.com/uc?export=download&id=1zokkrUlquewbgnDZTXA-VqIDDLt_jDW9" },
+            { nombre: "Autodesk Error de Requerimiento", url: "https://drive.google.com/uc?export=download&id=1r8v4lAKyM8u1CypYMTOPT8vANOQ6KxRv" },
+            { nombre: "Autodesk Error -1603", url: "https://drive.google.com/uc?export=download&id=1qBdbAV-ciC9_CNO1cTNEukEl2amRmaw_" },
+            { nombre: "Autodesk Error Genuine-Software 2 ", url: "https://drive.google.com/uc?export=download&id=1VwjQSVICALjriCAmSlGPK_Pn7FlIGV1J" },
+            { nombre: "MathCad Prime error de Licencia -9", url: "https://drive.google.com/uc?export=download&id=1_Ee4F_WxsUbairFCbBGUmu-ScHKg0FZl" },
+            { nombre: "Activacion de Windows bat", url: "https://drive.google.com/uc?export=download&id=1zPyniDqvgrCdfLrdgYHkjL7qiFG9qw8j" },
+            { nombre: "Desactivar Antivirus bat", url: "https://drive.google.com/uc?export=download&id=19HV3fBlfba8OjAT6KldV0NZ9PgKqoWST" },
+            { nombre: "Limpieza de Temporales bat", url: "https://drive.google.com/uc?export=download&id=1n9P46FdUFTrdSE8wHdqqlWhDJDknAlEb" },
+            { nombre: "Reportes de Salon bat", url: "https://drive.google.com/uc?export=download&id=1Qdg7xehReaQ8m1kLcPOn-4ADubCOdtVS" },
+            { nombre: "Limpieza de Temporales 2 bat", url: "https://drive.google.com/uc?export=download&id=1jymwVPEDeJNGn8vFGjfBz46pjnbyTiYq" },
+            { nombre: "Entrar a la BIOS bat", url: "https://drive.google.com/uc?export=download&id=1kn14OccsnFXJGQ-fAKOL0W3c_VrJQUxb" },
+            { nombre: "Clonacion con Acronix en PDF", url: "https://drive.google.com/uc?export=download&id=1M1kgKfFndIwHP23km9m_Fs4FTAr21Nd7" },
+            { nombre: "Creacion de copias y restauracion con Acronix en PDF", url: "https://drive.google.com/uc?export=download&id=13TnrxxGllu_qsUtQmfTMMwfpoHkRy05p" },
+            { nombre: "Particionamiento con Partition Wizard en PDF", url: "https://drive.google.com/uc?export=download&id=1Rwm8GMD50cfqMEbUDWe46Uy-lvQurgXw" },
+            { nombre: "Problema con la Resolucion de Pantalla", url: "https://drive.google.com/uc?export=download&id=1VIGFCS5KuPBBqxTauNHVS8UizO023OTh" },
+        ];
+
+        const cont = document.getElementById('botones-container');
+        const input = document.getElementById('buscador-input');
+
+        function renderizar(lista) {
+            cont.innerHTML = '';
+            lista.forEach(en => {
+                const a = document.createElement('a');
+                a.textContent = en.nombre;
+                a.href = (en.url && en.url !== '#') ? en.url : "#";
+                a.className = 'boton-enlace';
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                cont.appendChild(a);
+            });
+        }
+
+        input.addEventListener('input', e => {
+            const query = e.target.value.trim().toLowerCase();
+            const filt = enlaces
+                .filter(en => en.nombre.toLowerCase().includes(query))
+                .sort((a, b) => a.nombre.localeCompare(b.nombre));
+            renderizar(filt);
+        });
+
+        // Carga inicial de todos los enlaces ordenados
+        renderizar(enlaces.sort((a, b) => a.nombre.localeCompare(b.nombre)));
+
+    </script>
+</body>
+
+</html>
